@@ -1,5 +1,6 @@
 services:
   database:
+    container_name: "postgres-dev"
     image: "postgres:16.0-alpine3.18"
     env_file:
       - ../.env.development
