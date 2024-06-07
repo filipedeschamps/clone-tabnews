@@ -4,13 +4,14 @@
   "description": "Implementação do https://www.tabnews.com.br para o https://curso.dev",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run services:up && npm run wait-for-postgres && npm run migration:up && next dev",
+    "setup-env": "npm run services:up && npm run wait-for-postgres && npm run migration:up",
+    "dev": "npm run setup-env && next dev",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down",
     "lint:check": "prettier --check .",
     "lint:fix": "prettier --write .",
-    "test": "npm run services:up && npm run wait-for-postgres && concurrently -n next,jest --hide next -k -s command-jest 'next dev' 'jest --runInBand'",
+    "test": "npm run setup-env && concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand\"",
     "test:watch": "jest --watchAll --runInBand",
     "migration:create": "node-pg-migrate -m infra/migrations create",
     "migration:up": "node-pg-migrate -m infra/migrations --envPath .env.development up",
@@ -19,7 +20,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "async-retry": "^1.3.3",
     "dotenv": "^16.4.4",
     "dotenv-expand": "^11.0.6",
     "next": "^13.1.6",
@@ -29,6 +29,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "async-retry": "^1.3.3",
     "concurrently": "^8.2.2",
     "jest": "^29.6.2",
     "prettier": "^2.8.8"
