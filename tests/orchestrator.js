@@ -1,5 +1,9 @@
 import retry from "async-retry";
 
+function makeWebserverUrl(path) {
+  return `http://localhost:3000${path}`;
+}
+
 async function waitForAllServices() {
   await waitForWebServer();
 
@@ -9,12 +13,13 @@ async function waitForAllServices() {
     });
 
     async function fetchStatusPage() {
-      const response = await fetch("http://localhost:3000/api/v1/status");
-      const responseBody = await response.json();
+      const url = makeWebserverUrl("/api/v1/status");
+      await fetch(url);
     }
   }
 }
 
 export default {
+  makeWebserverUrl,
   waitForAllServices,
 };
