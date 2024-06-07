@@ -1,3 +1,4 @@
+import database from "infra/database.js";
 import retry from "async-retry";
 
 function makeWebserverUrl(path) {
@@ -19,7 +20,12 @@ async function waitForAllServices() {
   }
 }
 
+async function dropAllTables() {
+  await database.query("drop schema public cascade; create schema public;");
+}
+
 export default {
   makeWebserverUrl,
   waitForAllServices,
+  dropAllTables,
 };
