@@ -1,11 +1,12 @@
 import orchestrator from "tests/orchestrator.js";
 
+const baseUrl = process.env.SITE_URL;
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
 });
 
 test("GET to /api/v1/status should return 200", async () => {
-  const response = await fetch("http://localhost:3000/api/v1/status");
+  const response = await fetch(baseUrl+"/api/v1/status");
   expect(response.status).toBe(200);
 
   const responseBody = await response.json();
