@@ -1,4 +1,8 @@
 import retry from "async-retry";
+import dotenv from "dotenv";
+
+dotenv.config()
+const siteUrl = process.env.SITE_URL;
 
 async function waitForAllServices() {
   await waitForWebServer();
@@ -9,7 +13,7 @@ async function waitForAllServices() {
     });
 
     async function fetchStatusPage() {
-      const response = await fetch("http://localhost:3000/api/v1/status");
+      const response = await fetch(siteUrl + "/api/v1/status");
       const responseBody = await response.json();
     }
   }
