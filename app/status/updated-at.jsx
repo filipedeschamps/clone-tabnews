@@ -10,7 +10,7 @@ export function UpdatedAt({ fallbackData }) {
   });
 
   if (isLoading) {
-    return <p>Carregando...</p>;
+    return <span>Carregando...</span>;
   }
 
   return <time>{data.updated_at}</time>;

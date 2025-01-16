@@ -6,9 +6,10 @@ async function Home() {
   return (
     <>
       <h1>Status</h1>
-      <UpdatedAt fallbackData={status.updated_at} />
+      <p>
+        Última atualização: <UpdatedAt fallbackData={status.updated_at} />
+      </p>
       <h1>Database</h1>
-
       <p>Versão: {status.dependencies.database.version}</p>
       <p>Conexões abertas: {status.dependencies.database.opened_connections}</p>
       <p>Conexões máximas: {status.dependencies.database.max_connections}</p>
