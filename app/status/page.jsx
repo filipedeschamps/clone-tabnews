@@ -6,8 +6,12 @@ async function Home() {
   return (
     <>
       <h1>Status</h1>
-      <p>{JSON.stringify(status.dependencies, null, 2)}</p>
       <UpdatedAt fallbackData={status.updated_at} />
+      <h1>Database</h1>
+
+      <p>Versão: {status.dependencies.database.version}</p>
+      <p>Conexões abertas: {status.dependencies.database.opened_connections}</p>
+      <p>Conexões máximas: {status.dependencies.database.max_connections}</p>
     </>
   );
 }
