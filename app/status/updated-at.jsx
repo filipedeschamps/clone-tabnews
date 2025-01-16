@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { fetchStatus } from "./page";
+import { fetchStatus } from "./fetch-status.js";
 
 export function UpdatedAt({ fallbackData }) {
   const { data, isLoading } = useSWR("/api/v1/status", fetchStatus, {

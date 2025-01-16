@@ -1,13 +1,5 @@
 import { UpdatedAt } from "./updated-at";
-
-export async function fetchStatus() {
-  const response = await fetch("http://localhost:3000/api/v1/status", {
-    next: { revalidate: 5 },
-  });
-  const json = await response.json();
-
-  return json;
-}
+import { fetchStatus } from "./fetch-status.js";
 
 async function Home() {
   const status = await fetchStatus();
