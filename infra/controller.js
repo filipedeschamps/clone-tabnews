@@ -15,11 +15,12 @@ function onNoMatchHandler(request, response) {
 }
 
 function onErrorHandler(error, request, response) {
-  if (
-    error instanceof ValidationError ||
-    error instanceof NotFoundError ||
-    error instanceof UnauthorizedError
-  ) {
+  if (error instanceof ValidationError || error instanceof NotFoundError) {
+    return response.status(error.statusCode).json(error);
+  }
+
+  if (error instanceof UnauthorizedError) {
+    clearSessionCookie(response);
     return response.status(error.statusCode).json(error);
   }
 
