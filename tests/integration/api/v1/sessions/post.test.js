@@ -99,6 +99,8 @@ describe("POST /api/v1/sessions", () => {
         password: "tudocorreto",
       });
 
+      await orchestrator.activateUser(createdUser);
+
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
         method: "POST",
         headers: {
