@@ -131,10 +131,16 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
       const expiresAt = new Date(responseBody.expires_at);
       const createdAt = new Date(responseBody.created_at);
 
-      expiresAt.setMilliseconds(0);
-      createdAt.setMilliseconds(0);
+      const expectedExpiresAt = new Date(
+        createdAt.getTime() + activation.EXPIRATION_IN_MILLISECONDS,
+      );
 
-      expect(expiresAt - createdAt).toBe(activation.EXPIRATION_IN_MILLISECONDS);
+      expect(expectedExpiresAt.getTime()).toBeGreaterThanOrEqual(
+        expiresAt.getTime(),
+      );
+      expect(
+        expectedExpiresAt.getTime() - expiresAt.getTime(),
+      ).toBeLessThanOrEqual(100);
 
       const activatedUser = await user.findOneById(responseBody.user_id);
       expect(activatedUser.features).toEqual([
@@ -166,6 +172,34 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
         action: "Entre em contato com o suporte.",
         status_code: 403,
       });
+    });
+
+    test("setMilliseconds(0) with toBe fails on race condition", () => {
+      const expiresAt = new Date("2026-01-01T00:15:00.999Z");
+      const createdAt = new Date("2026-01-01T00:00:01.001Z");
+
+      expiresAt.setMilliseconds(0);
+      createdAt.setMilliseconds(0);
+
+      expect(expiresAt - createdAt).not.toBe(
+        activation.EXPIRATION_IN_MILLISECONDS,
+      );
+    });
+
+    test("comparing from createdAt resolves the race condition", () => {
+      const expiresAt = new Date("2026-01-01T00:15:00.999Z");
+      const createdAt = new Date("2026-01-01T00:00:01.001Z");
+
+      const expectedExpiresAt = new Date(
+        createdAt.getTime() + activation.EXPIRATION_IN_MILLISECONDS,
+      );
+
+      expect(expectedExpiresAt.getTime()).toBeGreaterThanOrEqual(
+        expiresAt.getTime(),
+      );
+      expect(
+        expectedExpiresAt.getTime() - expiresAt.getTime(),
+      ).toBeLessThanOrEqual(100);
     });
   });
 
